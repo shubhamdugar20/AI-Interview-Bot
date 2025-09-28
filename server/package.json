@@ -1,0 +1,24 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "mammoth": "^1.11.0",
+    "multer": "^2.0.2",
+    "node-fetch": "^3.3.2",
+    "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^5.4.149"
+  }
+}
