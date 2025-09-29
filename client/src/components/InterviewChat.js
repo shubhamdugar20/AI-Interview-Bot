@@ -231,7 +231,7 @@ export default function InterviewChat() {
       dispatch(setFinalScore({ 
         id: candidateId, 
         score: Math.round(averageScore * 10) / 10,
-        summary: `Final assessment based on ${allAnswers.length} questions. Average score: ${Math.round(averageScore * 10) / 10}/10`
+        summary: `Final assessment based on 6 questions. Average score: ${Math.round(averageScore * 10) / 10}/10`
       }));
     }
     
