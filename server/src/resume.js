@@ -35,7 +35,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "Unsupported file type" });
     }
 
-    // 🤖 Call OpenAI to extract details
+    //  Call OpenAI to extract details
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
