@@ -33,7 +33,7 @@ export default function ResumeUploader() {
       const formData = new FormData();
       formData.append("file", file);
 
-      const resp = await axios.post("http://localhost:3001/api/resume/upload", formData, {
+      const resp = await axios.post("https://ai-interview-bot-eo27.onrender.com/api/resume/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -45,7 +45,7 @@ export default function ResumeUploader() {
 
       let questions = [];
       try {
-        const aiResp = await axios.post("http://localhost:3001/api/openai", {
+        const aiResp = await axios.post("https://ai-interview-bot-eo27.onrender.com/api/openai", {
           model: "gpt-4o-mini",
           messages: [
             {
