@@ -19,7 +19,6 @@
     "mammoth": "^1.11.0",
     "multer": "^2.0.2",
     "node-fetch": "^3.3.2",
-    "pdf-parse": "^1.1.1",
-    "pdfjs-dist": "^5.4.149"
+    "pdf-parse": "^1.1.1"
   }
 }
