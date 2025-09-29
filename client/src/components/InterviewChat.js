@@ -116,16 +116,25 @@ export default function InterviewChat() {
     if (!curQ) return;
     
     setLoading(true);
-    const ans = isAutoSubmit ? "[Time's Up - Auto Submitted]" : input.trim();
+    
+    // Always use the current input text, even for auto-submit
+    let ans = input.trim();
+    
+    // Only show time's up message if input is empty
+    if (isAutoSubmit && !ans) {
+      ans = "[Time's Up - Auto Submitted]";
+    }
     
     console.log('Submitting answer - auto:', isAutoSubmit, 'answer:', ans);
     
-    // Only call AI if it's a manual submit with actual content
-    if (!isAutoSubmit && ans && ans !== "[Time's Up - Auto Submitted]") {
+    // Always try to get AI feedback for both manual and auto-submissions with actual content
+    if (ans && ans !== "[Time's Up - Auto Submitted]") {
       const messages = [
         { 
           role: "system", 
-          content: "You are an interview scoring assistant. Analyze the answer and provide a score from 0-10 with constructive feedback." 
+          content: `You are an interview scoring assistant. Analyze the answer and provide a score from 0-10 with constructive feedback. 
+          Important: Even if the answer is incomplete due to time constraints, provide an appropriate score and feedback based on what was written.
+          Consider the context - if the answer seems cut off, evaluate what's present and mention it was likely due to time limits.` 
         },
         { 
           role: "user", 
@@ -159,21 +168,40 @@ export default function InterviewChat() {
       } catch (error) {
         console.error("AI scoring failed:", error);
         message.error("AI scoring failed");
-        // Even if AI fails, still submit the answer
+        // Fallback: if AI fails, use default values
+        const fallbackScore = isAutoSubmit ? 0 : 5;
+        const fallbackFeedback = isAutoSubmit ? 
+          "Time's up - auto submitted with partial answer (AI evaluation failed)" : 
+          "AI evaluation failed - manual review needed";
+        
         dispatch(submitAnswer({ 
           questionId: curQ.id, 
           answer: ans, 
-          score: 0, 
-          feedback: "AI evaluation failed" 
+          score: fallbackScore, 
+          feedback: fallbackFeedback 
+        }));
+        
+        dispatch(addTranscriptEntry({ 
+          id: candidateId, 
+          entry: { 
+            question: curQ.text, 
+            answer: ans, 
+            score: fallbackScore, 
+            feedback: fallbackFeedback 
+          } 
         }));
       }
     } else {
-      // Auto-submit with 0 score or empty answer
+      // Handle empty answers or time's up with no input
+      const feedback = isAutoSubmit ? 
+        (ans ? "Time's up - submitted partial answer" : "Time's up - no answer provided") : 
+        "Empty answer submitted";
+      
       dispatch(submitAnswer({ 
         questionId: curQ.id, 
         answer: ans, 
         score: 0, 
-        feedback: isAutoSubmit ? "Time's up - auto submitted" : "Empty answer submitted" 
+        feedback: feedback 
       }));
       
       dispatch(addTranscriptEntry({ 
@@ -182,7 +210,7 @@ export default function InterviewChat() {
           question: curQ.text, 
           answer: ans, 
           score: 0, 
-          feedback: isAutoSubmit ? "Time's up - auto submitted" : "Empty answer submitted" 
+          feedback: feedback 
         } 
       }));
     }
@@ -431,6 +459,7 @@ export default function InterviewChat() {
                           remaining={remaining} 
                           total={curQ.timeLimit} 
                           onTimeUp={() => handleSubmit(true)}
+                          difficulty={curQ.difficulty}
                         />
                       </div>
                     )}
