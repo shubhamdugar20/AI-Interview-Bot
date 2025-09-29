@@ -51,7 +51,7 @@ export default function ResumeUploader() {
             {
               role: "system",
               content:
-                "You are an expert interview question generator. Generate exactly 6 questions for a candidate based on Node.js and React. Return JSON array structure where each object has {id:'q1', text:'...', difficulty:'easy|medium|hard', timeLimit:20} properties. 2 easy, 2 medium, 2 hard.",
+                "You are an expert interview question generator. Generate exactly 6 technical interview questions for a candidate focused on Node.js and React. \n\nReturn a JSON array where each question object has these properties:\n- id: unique identifier like 'q1', 'q2', etc.\n- text: the question text\n- difficulty: 'easy', 'medium', or 'hard'\n- timeLimit: number of seconds (MUST follow: easy=20, medium=60, hard=120)\n\nDistribution: 2 easy questions, 2 medium questions, 2 hard questions.\n\nImportant: The timeLimit MUST be exactly:\n- 20 seconds for easy questions\n- 60 seconds for medium questions  \n- 120 seconds for hard questions\n\nReturn only valid JSON, no additional text."
             },
             {
               role: "user",
